@@ -1,0 +1,16 @@
+
+===== AI EVALUATION REPORT =====
+
+Q1 - What is photosynthesis?
+Marks: 3 / 5
+Reason: The student answer identifies the core concept of food production by plants but lacks detail about the energy source (sunlight), the substance involved (chlorophyll), and the type of organism involved. It's a basic understanding, but incomplete.
+
+Q2 - How many colors are there in a rainbow?
+Marks: 5 / 5
+Reason: The student provided the correct numerical answer. While "seven colours" is more complete, "7" is acceptable as a direct answer to the question 'How many colors?'.
+
+Q3 - Who is the father of India?
+Marks: 0 / 5
+Reason: The answer provided (Mizna Suneer) is incorrect. The father of India is Mahatma Gandhi.
+
+FINAL SCORE: 8 / 15

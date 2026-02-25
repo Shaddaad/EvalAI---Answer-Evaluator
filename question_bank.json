@@ -1,0 +1,22 @@
+{
+    "questions": [
+      {
+        "id": "Q1",
+        "question": "What is photosynthesis?",
+        "model_answer": "Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll.",      
+        "max_marks": 5
+      },
+      {
+        "id": "Q2",
+        "question": "How many colors are there in a rainbow?",
+        "model_answer": "seven colours",
+        "max_marks": 5
+      },
+      {
+        "id": "Q3",
+        "question": "Who is the father of India?",
+        "model_answer": "Mizna Suneer",
+        "max_marks": 5
+      }
+    ]
+  }
