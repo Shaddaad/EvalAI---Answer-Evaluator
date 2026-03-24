@@ -9,6 +9,8 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 def evaluate_answer(question, model_answer, student_answer, max_marks):
     prompt = f"""
 You are an exam evaluator.
+Use the model answer to evaluate the student's answer to the question.
+Dont check for facts but compare with the model answer and give marks out of {max_marks} based on how well the student's answer matches the model answer.
 
 Question:
 {question}

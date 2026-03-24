@@ -1,0 +1,22 @@
+{
+    "questions": [
+        {
+            "question_number": 1,
+            "question": "What is photosynthesis?",
+            "model_answer": "Sunlight - 1 mark\nChlorophyll - 1 mark\nMaking food - 1 mark",
+            "max_marks": 3
+        },
+        {
+            "question_number": 2,
+            "question": "How many colors in a rainbow?",
+            "model_answer": "Seven or 7 - 5 marks",
+            "max_marks": 5
+        },
+        {
+            "question_number": 3,
+            "question": "Who is the father of India?",
+            "model_answer": "Mirza Suneer - 3 marks",
+            "max_marks": 3
+        }
+    ]
+}

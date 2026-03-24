@@ -1,51 +1,51 @@
 import sys
-from ocr.gemini_ocr import extract_text
-from nlp.text_cleaner import clean_text
-from evaluation.paper_evaluator import split_answers_by_question, load_questions
+import os
+import json
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from evaluation.key_extractor import extract_answer_key
+from evaluation.student_parser import split_student_answers
 from evaluation.answer_evaluator import evaluate_answer
+from ocr.gemini_ocr import extract_text
 
 
-def generate_report(results):
-    total = 0
-    max_total = 0
-
-    report = "\n===== AI EVALUATION REPORT =====\n\n"
-
-    for r in results:
-        report += f"{r['id']} - {r['question']}\n"
-        report += f"Marks: {r['marks']} / {r['max_marks']}\n"
-        report += f"Reason: {r['reason']}\n\n"
-
-        total += r["marks"]
-        max_total += r["max_marks"]
-
-    report += f"FINAL SCORE: {total} / {max_total}\n"
-
-    with open("result.txt", "w") as f:
-        f.write(report)
-
-    print(report)
+# ---------------------------
+# KEY CREATION MODE
+# ---------------------------
+def run_key_extraction(key_image):
+    extract_answer_key(key_image)
 
 
-def run_pipeline(image_path):
-    print("\nSTEP 1 — OCR")
-    raw_text = extract_text(image_path)
+# ---------------------------
+# EVALUATION MODE
+# ---------------------------
+def run_evaluation(student_image):
+    # Step 1: OCR student paper
+    student_text = extract_text(student_image)
 
-    print("STEP 2 — Cleaning")
-    cleaned_text = clean_text(raw_text)
+    # Step 2: Split student answers by question number
+    student_answers = split_student_answers(student_text)
 
-    print("STEP 3 — Splitting Answers")
-    answers = split_answers_by_question(cleaned_text)
+    # Step 3: Load generated answer key JSON
+    if not os.path.exists("answer_key.json"):
+        print("No answer_key.json found. Please create key first.")
+        return
 
-    print("STEP 4 — Loading Questions")
-    questions = load_questions()
+    with open("answer_key.json", "r") as f:
+        key_data = json.load(f)
 
-    print("STEP 5 — Evaluating All Answers")
-    results = []
+    questions = key_data["questions"]
+
+    total_score = 0
+    total_max = 0
+
+    print("\n===== AI EVALUATION REPORT =====\n")
 
     for q in questions:
-        qid = q["id"]
-        student_answer = answers.get(qid, "")
+        qnum = q["question_number"]
+
+        student_answer = student_answers.get(qnum, "No answer provided.")
 
         result = evaluate_answer(
             q["question"],
@@ -54,20 +54,33 @@ def run_pipeline(image_path):
             q["max_marks"]
         )
 
-        results.append({
-            "id": qid,
-            "question": q["question"],
-            "marks": result["marks"],
-            "max_marks": q["max_marks"],
-            "reason": result["reason"]
-        })
+        print(f"Q{qnum} - {q['question']}")
+        print(f"Student Answer: {student_answer}")
+        print(f"Marks: {result['marks']} / {q['max_marks']}")
+        print(f"Reason: {result['reason']}\n")
 
-    generate_report(results)
+        total_score += result["marks"]
+        total_max += q["max_marks"]
+
+    print(f"FINAL SCORE: {total_score} / {total_max}")
 
 
+# ---------------------------
+# ENTRY POINT
+# ---------------------------
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python cli.py <answer_sheet_image>")
-        sys.exit(1)
+    if len(sys.argv) < 3:
+        print("Usage:")
+        print("Create key: python cli.py key <key_image>")
+        print("Evaluate:   python cli.py eval <student_image>")
+        sys.exit()
 
-    run_pipeline(sys.argv[1])
+    mode = sys.argv[1]
+    image_path = sys.argv[2]
+
+    if mode == "key":
+        run_key_extraction(image_path)
+    elif mode == "eval":
+        run_evaluation(image_path)
+    else:
+        print("Invalid mode. Use 'key' or 'eval'.")
