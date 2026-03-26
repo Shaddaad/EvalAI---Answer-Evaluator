@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Teacher Panel</title>
+
+<style>
+body{
+font-family: Arial, sans-serif;
+margin:40px;
+}
+
+input{
+display:block;
+margin:10px 0;
+padding:8px;
+width:260px;
+}
+
+button{
+padding:8px 12px;
+margin-top:5px;
+cursor:pointer;
+}
+
+pre{
+background:#f4f4f4;
+padding:10px;
+border:1px solid #ccc;
+width:600px;
+overflow:auto;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Teacher Panel</h1>
+
+<hr>
+
+<h2>Create Exam</h2>
+
+<input id="exam_name" placeholder="Exam Name">
+<input id="class_name" placeholder="Class">
+<input id="marks" placeholder="Max Marks">
+<input id="date" placeholder="Date (YYYY-MM-DD)">
+
+<button onclick="createExam()">Create Exam</button>
+
+<pre id="create_result"></pre>
+
+<hr>
+
+<h2>Upload Answer Key</h2>
+
+<input id="exam_id_key" placeholder="Exam ID">
+<input type="file" id="answer_file">
+
+<button onclick="uploadKey()">Upload Answer Key</button>
+
+<pre id="upload_result"></pre>
+
+<hr>
+
+<h2>Run Evaluation</h2>
+
+<input id="exam_id_eval" placeholder="Exam ID">
+
+<button onclick="runEvaluation()">Run Evaluation</button>
+
+<pre id="eval_result"></pre>
+
+<hr>
+
+<button onclick="logout()">Logout</button>
+
+<script>
+
+// GET TOKEN
+const token = localStorage.getItem("token")
+
+// CHECK LOGIN
+if(!token){
+alert("Please login first")
+window.location="/"
+}
+
+
+// CREATE EXAM
+async function createExam(){
+
+const exam_name=document.getElementById("exam_name").value
+const class_name=document.getElementById("class_name").value
+const marks=parseInt(document.getElementById("marks").value)
+const date=document.getElementById("date").value
+
+const res=await fetch("/teacher/create-exam",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+token
+},
+body:JSON.stringify({
+exam_name:exam_name,
+class:class_name,
+max_marks:marks,
+date:date,
+valuation_type:"moderate"
+})
+})
+
+const data=await res.json()
+
+document.getElementById("create_result").textContent=
+JSON.stringify(data,null,2)
+
+}
+
+
+// UPLOAD ANSWER KEY
+async function uploadKey(){
+
+const exam_id=document.getElementById("exam_id_key").value
+const file=document.getElementById("answer_file").files[0]
+
+const formData=new FormData()
+formData.append("file",file)
+
+const res=await fetch("/teacher/upload-answer-key/"+exam_id,{
+method:"POST",
+headers:{
+"Authorization":"Bearer "+token
+},
+body:formData
+})
+
+const data=await res.json()
+
+document.getElementById("upload_result").textContent=
+JSON.stringify(data,null,2)
+
+}
+
+
+// RUN EVALUATION
+async function runEvaluation(){
+
+const exam_id=document.getElementById("exam_id_eval").value
+
+const res=await fetch("/teacher/run-evaluation/"+exam_id,{
+method:"POST",
+headers:{
+"Authorization":"Bearer "+token
+}
+})
+
+const data=await res.json()
+
+document.getElementById("eval_result").textContent=
+JSON.stringify(data,null,2)
+
+}
+
+
+// LOGOUT
+function logout(){
+localStorage.removeItem("token")
+window.location="/"
+}
+
+</script>
+
+</body>
+</html>

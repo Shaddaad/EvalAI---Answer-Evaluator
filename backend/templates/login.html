@@ -1,0 +1,50 @@
+const token = localStorage.getItem("token")
+
+if(!token){
+
+alert("Please login first")
+
+window.location="/"
+
+}
+<script>
+
+    async function login(){
+    
+    const email = document.getElementById("email").value
+    const password = document.getElementById("password").value
+    
+    const res = await fetch("/login",{
+    method:"POST",
+    headers:{
+    "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+    email:email,
+    password:password
+    })
+    })
+    
+    const data = await res.json()
+    
+    if(data.access_token){
+    
+    localStorage.setItem("token",data.access_token)
+    
+    if(data.role=="admin"){
+    window.location="/admin"
+    }
+    
+    if(data.role=="teacher"){
+    window.location="/teacher"
+    }
+    
+    }else{
+    
+    alert("Login failed")
+    
+    }
+    
+    }
+    
+    </script>

@@ -3,12 +3,12 @@
         {
             "question_number": 1,
             "question": "What is photosynthesis?",
-            "model_answer": "Sunlight - 1 mark\nChlorophyll - 1 mark\nMaking food - 1 mark",
+            "model_answer": "Sunlight - 1 mark\nChlorophyll - 1 mark\nmaking food - 1 mark",
             "max_marks": 3
         },
         {
             "question_number": 2,
-            "question": "How many colors in a rainbow?",
+            "question": "How many colours in a rainbow?",
             "model_answer": "Seven or 7 - 5 marks",
             "max_marks": 5
         },
