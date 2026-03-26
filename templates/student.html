@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Student Panel</h1>
+
+<input id="exam_id" placeholder="Exam ID">
+<input id="roll" placeholder="Roll Number">
+
+<textarea id="answer" placeholder="Write answer"></textarea>
+
+<button onclick="submit()">Submit</button>
+
+<pre id="result"></pre>
+
+<script>
+
+async function submit(){
+
+const res = await fetch("/student/submit",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+exam_id:document.getElementById("exam_id").value,
+roll:document.getElementById("roll").value,
+answer:document.getElementById("answer").value
+})
+})
+
+const data = await res.json()
+
+document.getElementById("result").innerText =
+JSON.stringify(data,null,2)
+
+}
+
+</script>
+
+</body>
+</html>

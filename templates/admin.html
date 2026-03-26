@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Admin Panel</h1>
+
+<h3>Create Teacher</h3>
+
+<input id="name" placeholder="Teacher Name">
+<input id="email" placeholder="Email">
+<input id="password" placeholder="Password">
+<input id="subject" placeholder="Subject">
+
+<button onclick="createTeacher()">Create Teacher</button>
+
+<pre id="result"></pre>
+
+<script>
+
+const token = localStorage.getItem("token")
+
+async function createTeacher(){
+
+const res = await fetch("/admin/create-teacher",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+token
+},
+body:JSON.stringify({
+name:document.getElementById("name").value,
+email:document.getElementById("email").value,
+password:document.getElementById("password").value,
+subject:document.getElementById("subject").value
+})
+})
+
+const data = await res.json()
+
+document.getElementById("result").innerText =
+JSON.stringify(data,null,2)
+
+}
+
+</script>
+
+</body>
+</html>

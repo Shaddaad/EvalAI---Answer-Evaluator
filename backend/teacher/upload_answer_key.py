@@ -1,9 +1,8 @@
-from bson import ObjectId
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from backend.auth.role_required import role_required
 from evaluation.key_extractor import extract_answer_key
-from database.db import db
+from database.exams import update_answer_key
 import os
 
 upload_key_route = Blueprint("upload_key_route", __name__)
@@ -16,23 +15,19 @@ UPLOAD_FOLDER = "uploads"
 @role_required("teacher")
 def upload_answer_key(exam_id):
 
-    if "file" not in request.files:
-        return jsonify({"error": "No file uploaded"}), 400
-
     file = request.files["file"]
 
-    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(filepath)
+    path = os.path.join("uploads", f"key_{exam_id}.jpg")
 
-    # Run OCR + key extractor
-    answer_key = extract_answer_key(filepath)
+    file.save(path)
 
-    # Save in MongoDB
-    db.exams.update_one(
-    {"_id": ObjectId(exam_id)},
-    {"$set": {"answer_key": answer_key}}
-)
+    # run key extractor
+    key_data = extract_answer_key(path)
+
+    # store structured key in DB
+    update_answer_key(exam_id, key_data)
+
     return jsonify({
-        "message": "Answer key uploaded successfully",
-        "answer_key": answer_key
+        "message": "Answer key extracted and stored",
+        "questions": key_data["questions"]
     })

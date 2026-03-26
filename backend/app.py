@@ -5,7 +5,10 @@ from backend.admin.create_class import create_class_route
 from backend.admin.add_student import add_student_route
 from backend.teacher.create_exam import create_exam_route
 from backend.teacher.upload_answer_key import upload_key_route
+from backend.teacher.upload_answer_sheet import upload_answer_sheet_route
+from backend.teacher.run_evaluation import run_evaluation_route
 from flask import render_template
+
 
 from backend.auth.login import login_route
 from backend.auth.register import register_route
@@ -15,7 +18,7 @@ from backend.teacher.run_evaluation import run_evaluation_route
 
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../templates")
 
 app.config["JWT_SECRET_KEY"] = "super-secret-key"
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -31,6 +34,7 @@ app.register_blueprint(create_class_route)
 app.register_blueprint(add_student_route)
 app.register_blueprint(create_exam_route)
 app.register_blueprint(upload_key_route)
+app.register_blueprint(upload_answer_sheet_route)
 app.register_blueprint(run_evaluation_route)
 
 @app.route("/")

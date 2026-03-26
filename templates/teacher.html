@@ -1,43 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <title>Teacher Panel</title>
-
-<style>
-body{
-font-family: Arial, sans-serif;
-margin:40px;
-}
-
-input{
-display:block;
-margin:10px 0;
-padding:8px;
-width:260px;
-}
-
-button{
-padding:8px 12px;
-margin-top:5px;
-cursor:pointer;
-}
-
-pre{
-background:#f4f4f4;
-padding:10px;
-border:1px solid #ccc;
-width:600px;
-overflow:auto;
-}
-</style>
 </head>
 
 <body>
 
 <h1>Teacher Panel</h1>
-
-<hr>
 
 <h2>Create Exam</h2>
 
@@ -57,9 +26,20 @@ overflow:auto;
 <input id="exam_id_key" placeholder="Exam ID">
 <input type="file" id="answer_file">
 
-<button onclick="uploadKey()">Upload Answer Key</button>
+<button onclick="uploadKey()">Upload</button>
 
 <pre id="upload_result"></pre>
+
+<hr>
+
+<h2>Upload Student Answer Paper (PDF)</h2>
+
+<input id="exam_id_sheet" placeholder="Exam ID">
+<input type="file" id="student_pdf">
+
+<button onclick="uploadStudentPaper()">Upload Answer Paper</button>
+
+<pre id="student_result"></pre>
 
 <hr>
 
@@ -71,23 +51,15 @@ overflow:auto;
 
 <pre id="eval_result"></pre>
 
-<hr>
-
-<button onclick="logout()">Logout</button>
-
 <script>
 
-// GET TOKEN
 const token = localStorage.getItem("token")
 
-// CHECK LOGIN
 if(!token){
 alert("Please login first")
 window.location="/"
 }
 
-
-// CREATE EXAM
 async function createExam(){
 
 const exam_name=document.getElementById("exam_name").value
@@ -117,8 +89,6 @@ JSON.stringify(data,null,2)
 
 }
 
-
-// UPLOAD ANSWER KEY
 async function uploadKey(){
 
 const exam_id=document.getElementById("exam_id_key").value
@@ -142,11 +112,34 @@ JSON.stringify(data,null,2)
 
 }
 
+async function uploadStudentPaper(){
 
-// RUN EVALUATION
+const exam_id=document.getElementById("exam_id_sheet").value
+const file=document.getElementById("student_pdf").files[0]
+
+const formData=new FormData()
+formData.append("file",file)
+
+const res=await fetch("/teacher/upload-answer-sheet/"+exam_id,{
+method:"POST",
+headers:{
+"Authorization":"Bearer "+token
+},
+body:formData
+})
+
+const data=await res.json()
+
+document.getElementById("student_result").textContent=
+JSON.stringify(data,null,2)
+
+}
+
 async function runEvaluation(){
 
 const exam_id=document.getElementById("exam_id_eval").value
+
+document.getElementById("eval_result").textContent="Running evaluation... please wait..."
 
 const res=await fetch("/teacher/run-evaluation/"+exam_id,{
 method:"POST",
@@ -161,14 +154,6 @@ document.getElementById("eval_result").textContent=
 JSON.stringify(data,null,2)
 
 }
-
-
-// LOGOUT
-function logout(){
-localStorage.removeItem("token")
-window.location="/"
-}
-
 </script>
 
 </body>

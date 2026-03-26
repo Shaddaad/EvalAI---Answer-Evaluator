@@ -1,5 +1,24 @@
 from database.db import db
 from database.utils import serialize_list
+from bson import ObjectId
+from database.db import exams
+
+
+def get_exam_by_id(exam_id):
+
+    exam = exams.find_one({"_id": ObjectId(exam_id)})
+
+    if exam:
+        exam["_id"] = str(exam["_id"])
+
+    return exam
+
+def update_answer_key(exam_id, key_data):
+
+    exams.update_one(
+        {"_id": ObjectId(exam_id)},
+        {"$set": {"answer_key": key_data}}
+    )
 
 exams = db.exams
 

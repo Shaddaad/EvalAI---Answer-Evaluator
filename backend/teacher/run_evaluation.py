@@ -1,12 +1,11 @@
-from bson import ObjectId
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required
 from backend.auth.role_required import role_required
-from database.db import db
+
+from database.exams import get_exam_by_id
 from ocr.gemini_ocr import extract_text
-from evaluation.student_parser import split_student_answers
-from evaluation.answer_evaluator import evaluate_answer
-from database.submissions import submit_answer, update_marks
+from evaluation.grader import evaluate_answer
+
 import os
 
 run_evaluation_route = Blueprint("run_evaluation_route", __name__)
@@ -19,70 +18,59 @@ UPLOAD_FOLDER = "uploads"
 @role_required("teacher")
 def run_evaluation(exam_id):
 
-    exam = db.exams.find_one({"_id": ObjectId(exam_id)})
+    print("\n===== EVALUATION STARTED =====")
+    print("Exam ID:", exam_id)
+
+    exam = get_exam_by_id(exam_id)
+
     if not exam:
+        print("Exam not found")
         return jsonify({"error": "Exam not found"}), 404
 
-    answer_key = exam.get("answer_key")
-
-    if not answer_key:
-        return jsonify({"error": "Answer key not uploaded"}), 400
+    answer_key = exam["answer_key"]["questions"]
 
     results = []
 
-    # scan all student answer sheets
-    for file in os.listdir(UPLOAD_FOLDER):
-        roll_number = file.split(".")[0]
-        if not file.endswith(".jpg") and not file.endswith(".png"):
-            continue
+    # SORT pages to maintain correct order
+    files = sorted(os.listdir(UPLOAD_FOLDER))
 
-        filepath = os.path.join(UPLOAD_FOLDER, file)
+    for file in files:
 
-        student_text = extract_text(filepath)
+        if file.startswith("page_") and file.endswith(".jpg"):
 
-        student_answers = split_student_answers(student_text)
+            print("Processing file:", file)
 
-        total_score = 0
-        evaluation = []
+            path = os.path.join(UPLOAD_FOLDER, file)
 
-        for q in answer_key["questions"]:
+            try:
 
-            qnum = q["question_number"]
+                # OCR extraction
+                text = extract_text(path)
 
-            student_answer = student_answers.get(qnum, "")
+                print("OCR completed for:", file)
 
-            result = evaluate_answer(
-                q["question"],
-                q["model_answer"],
-                student_answer,
-                q["max_marks"]
-            )
+                # AI evaluation
+                evaluation = evaluate_answer(answer_key, text)
 
-            evaluation.append({
-                "question_number": qnum,
-                "student_answer": student_answer,
-                "marks": result["marks"],
-                "reason": result["reason"]
-            })
+                results.append({
+                    "file": file,
+                    "evaluation": evaluation
+                })
 
-            total_score += result["marks"]
+            except Exception as e:
 
-    student_id = file.replace(".jpg","").replace(".png","")
+                print("Error while evaluating:", file)
+                print(str(e))
 
-    submit_answer(
-        exam_id,
-        student_id,
-        student_answers
-)
+                results.append({
+                    "file": file,
+                    "error": str(e)
+                })
 
-    results.append({
-        "student_file": file,
-        "student_id": student_id,
-        "score": total_score,
-        "evaluation": evaluation
-})
+    print("===== EVALUATION FINISHED =====\n")
 
     return jsonify({
+        "message": "Evaluation completed successfully",
         "exam_id": exam_id,
         "results": results
     })

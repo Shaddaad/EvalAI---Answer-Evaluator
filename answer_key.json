@@ -2,21 +2,141 @@
     "questions": [
         {
             "question_number": 1,
-            "question": "What is photosynthesis?",
-            "model_answer": "Sunlight - 1 mark\nChlorophyll - 1 mark\nmaking food - 1 mark",
-            "max_marks": 3
+            "question": "For each point - underutilized, efficient, unattainable PPC should be concave and have correctly labelled axis.",
+            "model_answer": "underutilized, efficient, unattainable PPC should be concave and have correctly labelled axis.",
+            "max_marks": 4
         },
         {
             "question_number": 2,
-            "question": "How many colours in a rainbow?",
-            "model_answer": "Seven or 7 - 5 marks",
-            "max_marks": 5
+            "question": "Each stage carries 1 mark.",
+            "model_answer": "Each stage carries 1 mark.",
+            "max_marks": 1
         },
         {
             "question_number": 3,
-            "question": "Who is the father of India?",
-            "model_answer": "Mirza Suneer - 3 marks",
+            "question": "TU increases, MU decreases but is positive.",
+            "model_answer": "TU increases, MU decreases but is positive.",
+            "max_marks": 1
+        },
+        {
+            "question_number": 4,
+            "question": "TU increases at decreasing rate, reaches maximum. MU decreases and reaches 0.",
+            "model_answer": "TU increases at decreasing rate, reaches maximum. MU decreases and reaches 0.",
+            "max_marks": 1
+        },
+        {
+            "question_number": 5,
+            "question": "TU decreases, MU goes negative.",
+            "model_answer": "TU decreases, MU goes negative.",
+            "max_marks": 1
+        },
+        {
+            "question_number": 6,
+            "question": "Correct definition along with equation for break-even point and the shutdown point",
+            "model_answer": "Correct definition along with equation for break-even point and the shutdown point",
             "max_marks": 3
+        },
+        {
+            "question_number": 7,
+            "question": "Three correctly named and labelled technical progress diagrams",
+            "model_answer": "Three correctly named and labelled technical progress diagrams",
+            "max_marks": 3
+        },
+        {
+            "question_number": 8,
+            "question": "Definition of opportunity cost and sunk cost. Example",
+            "model_answer": "Definition of opportunity cost and sunk cost. Example",
+            "max_marks": 3
+        },
+        {
+            "question_number": 9,
+            "question": "Law of demand",
+            "model_answer": "Law of demand",
+            "max_marks": 1
+        },
+        {
+            "question_number": 10,
+            "question": "Three determinants of demand with explanation",
+            "model_answer": "Three determinants of demand with explanation",
+            "max_marks": 3
+        },
+        {
+            "question_number": 11,
+            "question": "Each correctly drawn figure",
+            "model_answer": "Each correctly drawn figure",
+            "max_marks": 4
+        },
+        {
+            "question_number": 12,
+            "question": "Correctly stated value of elasticity",
+            "model_answer": "Correctly stated value of elasticity",
+            "max_marks": 2
+        },
+        {
+            "question_number": 13,
+            "question": "Steps",
+            "model_answer": "Steps",
+            "max_marks": 2
+        },
+        {
+            "question_number": 14,
+            "question": "Final value = -1.2",
+            "model_answer": "Final value = -1.2",
+            "max_marks": 1
+        },
+        {
+            "question_number": 15,
+            "question": "Complementary goods",
+            "model_answer": "Complementary goods",
+            "max_marks": 1
+        },
+        {
+            "question_number": 16,
+            "question": "Name of the short run and long run law",
+            "model_answer": "Name of the short run and long run law",
+            "max_marks": 2
+        },
+        {
+            "question_number": 17,
+            "question": "Three stages name",
+            "model_answer": "Three stages name",
+            "max_marks": 1.5
+        },
+        {
+            "question_number": 18,
+            "question": "Explanation of each stage with examples",
+            "model_answer": "Explanation of each stage with examples",
+            "max_marks": 1.5
+        },
+        {
+            "question_number": 19,
+            "question": "Correctly labelled diagram",
+            "model_answer": "Correctly labelled diagram",
+            "max_marks": 2
+        },
+        {
+            "question_number": 20,
+            "question": "Three stages of returns to scale",
+            "model_answer": "Three stages of returns to scale",
+            "max_marks": 3
+        },
+        {
+            "question_number": 21,
+            "question": "Q= 60",
+            "model_answer": "Q= 60",
+            "max_marks": 1
+        },
+        {
+            "question_number": 22,
+            "question": "APL",
+            "model_answer": "APL",
+            "max_marks": 1.5
+        },
+        {
+            "question_number": 23,
+            "question": "MPL",
+            "model_answer": "MPL",
+            "max_marks": 1.5
         }
     ]
 }

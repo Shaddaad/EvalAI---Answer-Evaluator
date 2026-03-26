@@ -1,23 +1,33 @@
 import re
 
-def split_student_answers(text):
+
+def split_answers_by_question(text):
+
     """
-    Splits student answer text into dictionary:
-    {
-        1: "answer...",
-        2: "answer...",
-    }
-    Assumes answers are written like:
-    1. answer...
-    2. answer...
+    Splits OCR extracted student answer text into question-wise answers.
+
+    Expected format in answer sheet:
+    1 ...
+    2 ...
+    3 ...
     """
 
     answers = {}
 
-    pattern = r"(\d+)[\).\s]+(.*?)(?=\n\d+[\).\s]+|$)"
-    matches = re.findall(pattern, text, re.DOTALL)
+    # Split using Q1, Q2, Q3 pattern
+    parts = re.split(r"(Q\d+)", text)
 
-    for num, ans in matches:
-        answers[int(num)] = ans.strip()
+    current_q = None
+
+    for part in parts:
+
+        part = part.strip()
+
+        if re.match(r"Q\d+", part):
+            current_q = int(part[1:])
+            answers[current_q] = ""
+
+        elif current_q:
+            answers[current_q] += part + " "
 
     return answers
