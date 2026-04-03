@@ -21,6 +21,7 @@ Rules:
 - Give marks strictly according to max_marks
 - If diagram required but not visible, give partial marks
 - Be fair but strict
+- For each question, include the original question text, what the student wrote, and a detailed reason for marks
 
 Return ONLY JSON:
 
@@ -28,6 +29,8 @@ Return ONLY JSON:
  "results":[
    {{
      "question":1,
+     "question_text":"What is polymorphism?",
+     "student_answer":"The student wrote this answer...",
      "marks_awarded":2,
      "max_marks":3,
      "feedback":"Good explanation but diagram incomplete"

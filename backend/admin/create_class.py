@@ -14,9 +14,8 @@ def create_class_api():
     data = request.json
 
     name = data["name"]
-    teacher_id = data["teacher_id"]
 
-    create_class(name, teacher_id)
+    create_class(name)
 
     return jsonify({
         "message": "Class created successfully"

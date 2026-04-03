@@ -23,11 +23,12 @@ def update_answer_key(exam_id, key_data):
 exams = db.exams
 
 
-def create_exam(exam_name, class_name, teacher_id, max_marks, date, valuation_type):
+def create_exam(exam_name, class_name, subject, teacher_id, max_marks, date, valuation_type):
 
     exam = {
         "exam_name": exam_name,
         "class": class_name,
+        "subject": subject,
         "teacher_id": teacher_id,
         "max_marks": max_marks,
         "date": date,
@@ -45,3 +46,12 @@ def get_exams():
     result = exams.find()
 
     return serialize_list(list(result))
+
+def get_exams_by_teacher(teacher_id):
+    
+    result = exams.find({"teacher_id": teacher_id})
+    return serialize_list(list(result))
+
+def delete_exam(exam_id):
+    result = exams.delete_one({"_id": ObjectId(exam_id)})
+    return result.deleted_count > 0

@@ -29,9 +29,7 @@ def get_teachers():
 
 def get_students():
 
-    students = list(users.find({"role": "student"})
-
-)
+    students = list(users.find({"role": "student"}))
 
     for s in students:
         s["_id"] = str(s["_id"])
